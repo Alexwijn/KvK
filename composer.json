@@ -1,0 +1,23 @@
+{
+  "name": "alexwijn/kvk",
+  "license": "MIT",
+  "require": {
+    "ext-json": "*",
+    "laravel/framework": "4.3.*|5.7.*|5.8.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Alexwijn\\KvK\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1.x-dev"
+    },
+    "laravel": {
+      "providers": [
+        "Alexwijn\\KvK\\ServiceProvider"
+      ]
+    }
+  }
+}
