@@ -6,12 +6,13 @@
 
 namespace Alexwijn\KvK\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 
 /**
  * Alexwijn\KvK\Resources\Address
  */
-class Address
+class Address implements Arrayable
 {
     /**
      * @var array
@@ -86,5 +87,22 @@ class Address
     public function country(): ?string
     {
         return Arr::get($this->payload, 'country');
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'street' => $this->street(),
+            'houseNumber' => $this->houseNumber(),
+            'extra' => $this->extra(),
+            'postalCode' => $this->postalCode(),
+            'city' => $this->city(),
+            'country' => $this->country(),
+        ];
     }
 }

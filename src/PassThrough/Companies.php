@@ -5,6 +5,7 @@ namespace Alexwijn\KvK\PassThrough;
 use Alexwijn\KvK\Concerns\HasConnection;
 use Alexwijn\KvK\Resources;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Arr;
 
 /**
  * Alexwijn\KvK\PassThrough\Companies
@@ -13,31 +14,20 @@ class Companies
 {
     use HasConnection;
 
-    public function find(string $id): ?Resources\Company
+    public function profile(string $query, int $page = 1): ?Resources\Companies
     {
         try {
-            $url = vprintf('/?%s', compact('id'));
-            $body = $this->connection->request('GET', $url);
+            $url = vsprintf('profile/companies?%s', [http_build_query(['q' => $query, 'startPage' => $page])]);
+            $response = $this->connection->request('GET', $url);
 
-            if ($response = json_decode($body, true)) {
-                return new Resources\Company($response);
-            }
-        } catch (GuzzleException $e) {
-            //
-        }
+            if ($data = json_decode($response->getBody(), true)) {
+                $collection = new Resources\Companies(
+                    Arr::get($data, 'data.startPage'),
+                    Arr::get($data, 'data.totalItems'),
+                    Arr::get($data, 'data.itemsPerPage')
+                );
 
-        return null;
-    }
-
-    public function search(string $query, int $page = 1, int $size = 100): ?Resources\Companies
-    {
-        try {
-            $url = vprintf('/?%s', [http_build_query(compact('query', 'page', 'size'))]);
-            $body = $this->connection->request('GET', $url);
-
-            if ($response = json_decode($body, true)) {
-                $collection = new Resources\Companies();
-                foreach ($response['_embedded'] as $company) {
+                foreach (Arr::get($data, 'data.items') as $company) {
                     $collection->push(new Resources\Company($company));
                 }
 
@@ -50,15 +40,20 @@ class Companies
         return null;
     }
 
-    public function suggest(string $query, int $size = 10): ?Resources\Companies
+    public function search(string $query, int $page = 1): ?Resources\Companies
     {
         try {
-            $url = vprintf('/suggest/%s?%s', [$query, http_build_query(compact('size'))]);
-            $body = $this->connection->request('GET', $url);
+            $url = vsprintf('search/companies?%s', [http_build_query(['q' => $query, 'startPage' => $page])]);
+            $response = $this->connection->request('GET', $url);
 
-            if ($response = json_decode($body, true)) {
-                $collection = new Resources\Companies();
-                foreach ($response['_embedded'] as $company) {
+            if ($data = json_decode($response->getBody(), true)) {
+                $collection = new Resources\Companies(
+                    Arr::get($data, 'data.startPage'),
+                    Arr::get($data, 'data.totalItems'),
+                    Arr::get($data, 'data.itemsPerPage')
+                );
+
+                foreach (Arr::get($data, 'data.items') as $company) {
                     $collection->push(new Resources\Company($company));
                 }
 

@@ -9,11 +9,26 @@ use Alexwijn\KvK\Collection;
  */
 class Companies extends Collection
 {
-    public function __construct(array $companies = [])
+    /**
+     * @var int
+     */
+    protected $pageSize;
+
+    /**
+     * @var int
+     */
+    protected $page;
+
+    /**
+     * @var int
+     */
+    protected $total;
+
+    public function __construct(int $page, int $total, int $pageSize)
     {
-        foreach ($companies as $company) {
-            $this->push($company);
-        }
+        $this->page = $page;
+        $this->total = $total;
+        $this->pageSize = $pageSize;
     }
 
     /** {@inheritDoc} */

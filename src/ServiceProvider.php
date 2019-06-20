@@ -2,6 +2,11 @@
 
 namespace Alexwijn\KvK;
 
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Message\RequestInterface;
+
 /**
  * Alexwijn\KvK\ServiceProvider
  */
@@ -25,11 +30,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             {
                 public function __construct()
                 {
+                    $middleware = Middleware::mapRequest(static function (RequestInterface $request) {
+                        return $request->withUri(
+                            Uri::withQueryValue($request->getUri(), 'user_key', config('kvk.api_key'))
+                        );
+                    });
+
                     parent::__construct([
-                        'headers' => [
-                            'Content-Type' => 'application/json',
-                            'auth' => [ config('kvk.username'),  config('kvk.password')],
-                        ],
+                        'headers' => ['Content-Type' => 'application/json'],
+                        'handler' => tap(HandlerStack::create())->push($middleware),
                         'base_uri' => 'https://api.kvk.nl/api/v2/' . (config('kvk.test_mode') ? 'test' : ''),
                     ]);
                 }
