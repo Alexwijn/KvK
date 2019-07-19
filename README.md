@@ -1,7 +1,7 @@
 ## KvK API client
 [![Packagist License](https://poser.pugx.org/alexwijn/kvk/license.png)](http://choosealicense.com/licenses/mit/)
-[![Latest Stable Version](https://poser.pugx.org/alexwijn/kvk/version.png)](https://packagist.org/packages/alexwijn/laravel-database-url)
-[![Total Downloads](https://poser.pugx.org/alexwijn/kvk/d/total.png)](https://packagist.org/packages/alexwijn/laravel-database-url)
+[![Latest Stable Version](https://poser.pugx.org/alexwijn/kvk/version.png)](https://packagist.org/packages/alexwijn/kvk)
+[![Total Downloads](https://poser.pugx.org/alexwijn/kvk/d/total.png)](https://packagist.org/packages/alexwijn/kvk)
 
 This package provide access to the [Kvk API](https://developers.kvk.nl/) using one simple class.
 
