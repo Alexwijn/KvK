@@ -95,7 +95,7 @@ class Company implements Arrayable
      */
     public function address(): \Alexwijn\KvK\Resources\Address
     {
-        return new Address(Arr::get($this->payload, 'addresses.0'));
+        return new Address(Arr::get($this->payload, 'addresses.0', []));
     }
 
     /**
